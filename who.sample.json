@@ -1,0 +1,28 @@
+{
+  "user_transfer": [
+    {
+      "#index": 0,
+      "#comment": "Player1",
+      "from": 0,
+      "to": 0
+    },
+    {
+      "#index": 1,
+      "#comment": "Player2",
+      "from": "8E910AC2000000000000000000000000",
+      "to": "8E910AC2000000000000000000000000"
+    },
+    {
+      "#index": 3,
+      "#comment": "Player3",
+      "from": "8E910AC2000000000000000000000000",
+      "to": 0
+    },
+    {
+      "#index": 4,
+      "#comment": "Player4",
+      "from": 0,
+      "to": "8E910AC2000000000000000000000000"
+    }
+  ]
+}
