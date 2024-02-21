@@ -274,3 +274,6 @@ who.json
 **/*.sav.json
 **/*.sav
 !.vscode/settings.json
+*.zip
+*.tar
+*.tar.gz

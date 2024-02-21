@@ -89,9 +89,9 @@ class WhoConfigUser():
     def __setitem__(self, __key: str, __value: str | int | None) -> None:
         if __key == "name" and not isinstance(__value, int):
             self.name = __value
-        elif (__key == "#comment" or __key == "comment") and not isinstance(__value, int):
+        elif __key in ["#comment", "comment"] and not isinstance(__value, int):
             self.comment = __value
-        elif (__key == "#index" or __key == "index") and not isinstance(__value, str):
+        elif __key in ["#index", "index"] and not isinstance(__value, str):
             self.index = __value
         elif __key == "old" and __value is not None:
             self.old = __value
@@ -169,6 +169,17 @@ class WhoConfig():
         return self._basicList
 
 
+    def __update_user_transfer_names__(self) -> None:
+        for index, _item in enumerate(self.user_transfer):
+            item: WhoConfigUser = WhoConfigUser(_item)
+            if item.comment is not None:
+                self.user_transfer[index]["name"] = item.comment
+            elif item.index is not None:
+                self.user_transfer[index]["name"] = f"#{item.index}"
+            else:
+                self.user_transfer[index]["name"] = f"index: {index}"
+
+
     def __init__(self, arg: _ValidConstructors) -> None:
         if arg is not None:
             for _, key in enumerate(self._basicList):
@@ -177,24 +188,16 @@ class WhoConfig():
                     self[key] = item
         self.__update_user_transfer_names__()
 
-    def __update_user_transfer_names__(self) -> None:
-        for index, _item in enumerate(self.user_transfer):
-            item: WhoConfigUser = WhoConfigUser(_item)
-            if item.index is not None:
-                item.name = f"#{item.index}"
-            elif item.comment is not None:
-                item.name = item.comment
-            else:
-                item.name = f"index: {index}"
-
 
 def transform_old_whole_name(_input: str) -> str:
     """Temporary Method Docstring."""
     expected_length: int = len("00000000000000000000000000000000")
     input_length: int = len(_input)
     difference_length: int = expected_length - input_length
+
     if difference_length < 0:
         raise ArithmeticError("Gotten length is longer than expected.")
+
     additional_zeros: str = "0" * difference_length
     return f"{_input.upper()}{additional_zeros}"
 
@@ -203,6 +206,8 @@ def load_who_config(path: str | Path) -> WhoConfig:
     """Creates a who config from path."""
     _path: Path = Path(path)
     output: WhoConfig
+
     with _path.open("r", encoding="utf8") as read_who_config_file:
         output = WhoConfig(json.loads(read_who_config_file.read()))
+
     return output

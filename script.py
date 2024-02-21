@@ -12,7 +12,7 @@ import re
 import sys
 from re import Match
 
-from fix_host_save import fix_host_save, json_to_sav, sav_to_json
+from fix_host_save import fix_host_save, sav_to_json
 from logger import pprint
 from who_config import WhoConfig, WhoConfigUser, load_who_config
 
@@ -46,8 +46,6 @@ def find_save_dir(root: Path) -> str:
 
 def enumerate_user_transfer(who_json: WhoConfig, sav_dir: str):
     """Temporary Method Docstring."""
-    level_sav_path = f"{sav_dir}/Level.sav"
-    level_json: dict[str, Any] = sav_to_json(level_sav_path)
     for _, _item in enumerate(who_json.user_transfer):
         item: WhoConfigUser = WhoConfigUser(_item)
         if isinstance(item.new, str) and isinstance(item.old, str):
@@ -60,6 +58,8 @@ def enumerate_user_transfer(who_json: WhoConfig, sav_dir: str):
                         " [magenta]from[/magenta] variable set.", indent=0)
                 continue
             try:
+                level_sav_path: str = f"{sav_dir}/Level.sav"
+                level_json: dict[str, Any] = sav_to_json(level_sav_path)
                 pprint(f"[green][bold]INFO:[/bold][/green] Modifying {item.name}.", indent=0)
                 fix_host_save(sav_dir, item.new, item.old, True, level_json)
             except FileNotFoundError as op_error:
@@ -77,7 +77,6 @@ def enumerate_user_transfer(who_json: WhoConfig, sav_dir: str):
                 raise error
         else:
             raise TypeError("_new or _old is not type of str.")
-    json_to_sav(level_json, level_sav_path)
 
 def main() -> None:
     """Temporary Method Docstring."""

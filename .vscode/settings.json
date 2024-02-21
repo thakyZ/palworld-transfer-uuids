@@ -1,5 +1,21 @@
 {
   "python.analysis.extraPaths": [
     "./libaries/**"
-  ]
+  ],
+  "editor.rulers": [
+  ],
+  "[python]": {
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.formatOnType": true,
+    "editor.wordBasedSuggestions": "off"
+  },
+  "pylint.severity": {
+    "convention": "Information",
+    "error": "Error",
+    "fatal": "Error",
+    "refactor": "Hint",
+    "warning": "Warning",
+    "info": "Information",
+    "C0301": "Hint"
+  }
 }

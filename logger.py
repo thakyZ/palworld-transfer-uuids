@@ -1,6 +1,6 @@
 #!/usr/env python3
 
-# pyright: reportUnknownMemberType=false
+# pyright: reportUnknownMemberType=false, reportOperatorIssue=false, reportUnknownVariableType=false
 # cSpell:ignore palworld
 
 """Temporary Module Docstring."""
@@ -31,11 +31,11 @@ TERM_THEME: TerminalTheme = TerminalTheme(
             (255, 255, 255)] # Light White
 )
 
-CONSOLE: Console = Console(color_system="256", force_terminal=True, force_jupyter=False,
-                           force_interactive=True, soft_wrap=True)
+CONSOLE: Console = Console(color_system="256", force_terminal=True, force_jupyter=False, force_interactive=True, soft_wrap=True)
 
 
 def list_prepend(__list: Iterable[Any], __object: Any) -> Iterable[Any]:
+    """Temporary Method Docstring."""
     new_list_obj: list[Any] = []
     new_list_obj.append(__object)
     for item in __list:
@@ -43,15 +43,8 @@ def list_prepend(__list: Iterable[Any], __object: Any) -> Iterable[Any]:
     return new_list_obj
 
 
-def pprint(*objects: Any, indent: int = 0, sep: str = " ", end: str = "\n",
-            style: Optional[Union[str, Style]] = None, justify: Optional[JustifyMethod] = None,
-            overflow: Optional[OverflowMethod] = None, no_wrap: Optional[bool] = None,
-            emoji: Optional[bool] = None, markup: Optional[bool] = None,
-            highlight: Optional[bool] = None, width: Optional[int] = None,
-            height: Optional[int] = None, crop: bool = True,
-            soft_wrap: Optional[bool] = None, new_line_start: bool = False,
-            # pylint: disable-next=W0613
-            flush: bool = False) -> None:
+# pylint: disable-next=W0613
+def pprint(*objects: Any, indent: int = 0, sep: str = " ", end: str = "\n", style: Optional[Union[str, Style]] = None, justify: Optional[JustifyMethod] = None, overflow: Optional[OverflowMethod] = None, no_wrap: Optional[bool] = None, emoji: Optional[bool] = None, markup: Optional[bool] = None, highlight: Optional[bool] = None, width: Optional[int] = None, height: Optional[int] = None, crop: bool = True, soft_wrap: Optional[bool] = None, new_line_start: bool = False, flush: bool = False) -> None:
     # pylint: disable=C0301
     """Print to the console.
 
@@ -69,17 +62,19 @@ def pprint(*objects: Any, indent: int = 0, sep: str = " ", end: str = "\n",
         highlight (Optional[bool], optional): Enable automatic highlighting, or ``None`` to use console default. Defaults to ``None``.
         width (Optional[int], optional): Width of output, or ``None`` to auto-detect. Defaults to ``None``.
         crop (Optional[bool], optional): Crop output to width of terminal. Defaults to True.
-        soft_wrap (bool, optional): Enable soft wrap mode which disables word wrapping and cropping of text or ``None`` for
-            Console default. Defaults to ``None``.
+        soft_wrap (bool, optional): Enable soft wrap mode which disables word wrapping and cropping of text or ``None`` for Console default. Defaults to ``None``.
         new_line_start (bool, False): Insert a new line at the start if the output contains more than one line. Defaults to ``False``.
         flush (bool, False): Does nothing. Defaults to ``False``.
     """
     # pylint: enable=C0301
-    new_objects: Iterable[Any] = tuple(objects)
-    for _ in range(indent):
-        new_objects = list_prepend(new_objects, "> ")
-    new_str = " ".join(new_objects)
+    indents: str = ""
+    if indent > 0:
+        indents = "    " * indent
+    new_objects: str = ""
+    for _object in objects:
+        new_objects = new_objects + str(_object)
+    new_objects = indents + new_objects
 
-    CONSOLE.print(new_str, sep=sep, end=end, style=style, justify=justify, overflow=overflow,
+    CONSOLE.print(new_objects, sep=sep, end=end, style=style, justify=justify, overflow=overflow,
                   no_wrap=no_wrap, emoji=emoji, markup=markup, highlight=highlight, width=width,
                   height=height, crop=crop, soft_wrap=soft_wrap, new_line_start=new_line_start)
