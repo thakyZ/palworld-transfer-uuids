@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 palworld-save-tools = "*"
 rich = "*"
+typing-json = "*"
 
 [dev-packages]
 

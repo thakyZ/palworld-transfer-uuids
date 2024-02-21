@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../palworld-save-tools"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../palworld-host-save-fix"
+		}
+	],
+	"settings": {}
+}

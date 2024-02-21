@@ -6,26 +6,33 @@
 """Temporary Module Docstring."""
 
 import os
-import json
 from pathlib import Path
-from typing import TypeAlias
+from typing import Any
 import re
+import sys
 from re import Match
-from rich import print as pprint
 
-from fix_host_save import fix_host_save
+from fix_host_save import fix_host_save, json_to_sav, sav_to_json
+from logger import pprint
+from who_config import WhoConfig, WhoConfigUser, load_who_config
 
-WhoJson: TypeAlias = dict[str, list[dict[str, int | str]]]
 
-def transform_to_whole_name(_input: str) -> str:
-    """Temporary Method Docstring."""
-    expected_length: int = len("00000000000000000000000000000000")
-    input_length: int = len(_input)
-    difference_length: int = expected_length - input_length
-    if difference_length < 0:
-        raise ArithmeticError("Gotten length is longer than expected.")
-    additional_zeros: str = "0" * difference_length
-    return f"{_input.upper()}{additional_zeros}"
+def exit_with_message(message: str | BaseException, code: int = 0) -> Any:
+    """Exits the command line if running in main thread."""
+    is_cli: bool = os.environ.get("is_cli") is not None and os.environ.get("is_cli") == "true"
+    if is_cli:
+        if isinstance(message, str) and code == 0:
+            pprint(f"[green]Completed:[/green] {message}", indent=0)
+        elif isinstance(message, str) and code > 0:
+            pprint(f"[bold][red]Error:[/red][/bold] {message}", indent=0)
+        elif isinstance(message, BaseException):
+            pprint(f"[bold][red]Error:[/red][/bold] {message}", indent=0)
+        sys.exit(code)
+    else:
+        if isinstance(message, str):
+            raise Exception(message) # pylint: disable=W0719
+        raise message
+
 
 def find_save_dir(root: Path) -> str:
     """Finds the save directory locally"""
@@ -34,58 +41,51 @@ def find_save_dir(root: Path) -> str:
             level_sav: Path = Path(os.path.join(_root, "Level.sav"))
             if Path(_root).parent.name == root.name and level_sav.exists():
                 return Path(_root).name
+    return exit_with_message(FileNotFoundError("No save directory found."), 1)
 
-    raise FileNotFoundError("No save directory found.")
 
-def main() -> None:
+def enumerate_user_transfer(who_json: WhoConfig, sav_dir: str):
     """Temporary Method Docstring."""
-    root: Path = Path(os.getcwd())
-    sav_dir: str = find_save_dir(root)
-    who_json: WhoJson = {}
-
-    with Path(os.path.join(root, "who.json")).open("r", encoding="utf8") as who_read:
-        who_json = json.loads(who_read.read())
-        who_read.close()
-
-    for index, item in enumerate(who_json["user_transfer"]):
-        _from_int: str | int = item["from"]
-        _to_int: str | int = item["to"]
-        if isinstance(_from_int, int) and isinstance(_to_int, int):
-            who_json["user_transfer"][index]["from"] = transform_to_whole_name(hex(_from_int)[2:])
-            who_json["user_transfer"][index]["to"] = transform_to_whole_name(hex(_to_int)[2:])
-        else:
-            raise TypeError("_from or _to is not type of int.")
-
-    for index, item in enumerate(who_json["user_transfer"]):
-        _from_str: str | int = item["from"]
-        _to_str: str | int = item["to"]
-
-        if isinstance(_from_str, str) and isinstance(_to_str, str):
-            if int(_to_str, base=16) == 0:
-                pprint(f"[yellow][bold]WARN:[/bold][/yellow] [blue]{item["#comment"]}[/blue] has no"
-                        " [magenta]to[/magenta] variable set.")
+    level_sav_path = f"{sav_dir}/Level.sav"
+    level_json: dict[str, Any] = sav_to_json(level_sav_path)
+    for _, _item in enumerate(who_json.user_transfer):
+        item: WhoConfigUser = WhoConfigUser(_item)
+        if isinstance(item.new, str) and isinstance(item.old, str):
+            if int(item.old, base=16) == 0:
+                pprint(f"[yellow][bold]WARN:[/bold][/yellow] [blue]{item.name}[/blue] has no"
+                        " [magenta]to[/magenta] variable set.", indent=0)
                 continue
-            if int(_from_str, base=16) == 0:
-                pprint(f"[yellow][bold]WARN:[/bold][/yellow] [blue]{item["#comment"]}[/blue] has no"
-                        " [magenta]from[/magenta] variable set.")
+            if int(item.new, base=16) == 0:
+                pprint(f"[yellow][bold]WARN:[/bold][/yellow] [blue]{item.name}[/blue] has no"
+                        " [magenta]from[/magenta] variable set.", indent=0)
                 continue
             try:
-                fix_host_save(sav_dir, _to_str, _from_str, True)
+                pprint(f"[green][bold]INFO:[/bold][/green] Modifying {item.name}.", indent=0)
+                fix_host_save(sav_dir, item.new, item.old, True, level_json)
             except FileNotFoundError as op_error:
                 if "Your player save does not exist" in str(op_error):
                     gotten: Match[str] | None = re.match(r"Player\/([A-F0-9]+).sav\"",str(op_error))
                     if gotten is not None:
                         pprint("[yellow][bold]WARN:[/bold][/yellow] Failed to find player file with"
-                              f" name {gotten.groups()}")
+                              f" name {gotten.groups()}", indent=0)
                     else:
                         pprint("[yellow][bold]WARN:[/bold][/yellow] Failed to find player file with"
-                              f" name {_to_str} or {_from_str}")
+                              f" name {item.old} or {item.new}", indent=0)
                 else:
                     raise op_error
             except Exception as error:
                 raise error
         else:
-            raise TypeError("_from or _to is not type of str.")
+            raise TypeError("_new or _old is not type of str.")
+    json_to_sav(level_json, level_sav_path)
+
+def main() -> None:
+    """Temporary Method Docstring."""
+    root: Path = Path(os.getcwd())
+    sav_dir: str = find_save_dir(root)
+    who_json: WhoConfig = load_who_config(Path(os.path.join(root, "who.json")))
+
+    enumerate_user_transfer(who_json, sav_dir)
 
 
 if __name__ == "__main__":
