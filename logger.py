@@ -1,7 +1,6 @@
 #!/usr/env python3
 
 # pyright: reportUnknownMemberType=false, reportOperatorIssue=false, reportUnknownVariableType=false
-# cSpell:ignore palworld
 
 """Temporary Module Docstring."""
 

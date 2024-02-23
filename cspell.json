@@ -1,0 +1,36 @@
+{
+    "version": "0.2",
+    "ignorePaths": [
+        "palworld_save_tools/**",
+        "test/*/"
+    ],
+    "dictionaryDefinitions": [],
+    "dictionaries": [
+      "en_US",
+      "en-gb",
+      "companies",
+      "softwareTerms",
+      "misc",
+      "typescript",
+      "node",
+      "php",
+      "go",
+      "python",
+      "powershell",
+      "html",
+      "css",
+      "csharp",
+      "latex",
+      "bash",
+      "fonts",
+      "filetypes",
+      "npm",
+      "palworld"
+    ],
+    "words": [
+        "palsav",
+        "paltypes"
+    ],
+    "ignoreWords": [],
+    "import": []
+}

@@ -3,7 +3,6 @@
 """Temporary Module Docstring."""
 
 # pyright: reportUnknownMemberType=false, reportUnknownVariableType=false
-# cSpell:ignore palworld gvas palsav paltypes
 
 import json
 import os
