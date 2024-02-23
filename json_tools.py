@@ -14,6 +14,7 @@ from local_types import JsonType, CustomJsonReader, CustomJsonWriter
 
 from palworld_save_tools.archive import UUID
 
+
 def json_serialize(obj: Any) -> Any:
     """JSON serializer for objects not serializable by default json code"""
     if isinstance(obj, UUID):
@@ -29,7 +30,7 @@ def parse_constant(obj: str) -> Any:
         pprint(f"Attempting to convert {obj} to UUID", indent=2)
         serial: UUID = UUID.from_str(obj)
         return serial
-     # pylint: disable-next=W0718
+    # pylint: disable-next=W0718
     except BaseException as exception:
         pprint(str(exception), indent=2)
 
@@ -58,8 +59,7 @@ def load_json(json_path: str | Path, method: CustomJsonReader | None = None) -> 
     return _temp
 
 
-def write_json(json_data: JsonType, json_path: str | Path,
-               method: CustomJsonWriter | None = None) -> None:
+def write_json(json_data: JsonType, json_path: str | Path, method: CustomJsonWriter | None = None) -> None:
     """A universal wrapper to load a json file from path into a type of ``JsonType``."""
     _path: Path
 

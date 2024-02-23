@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Temporary Module Docstring."""
+"""Test module for the pyproject Palworld Transfer & Clean Save File."""
 
 import os
 from zipfile import ZipFile
@@ -11,9 +11,9 @@ EXAMPLE_ZIP: Path = Path(os.path.join(CURRENT_DIR, "example.zip"))
 
 
 def main() -> None:
-    """Temporary Method Docstring."""
+    """The main method of the test file."""
     if EXAMPLE_ZIP.exists():
-        with ZipFile(EXAMPLE_ZIP, 'r') as zipObject:
+        with ZipFile(EXAMPLE_ZIP, "r") as zipObject:
             zipObject.extractall(CURRENT_DIR)
 
     import script as transfer_uuids

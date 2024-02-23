@@ -1,1 +1,1 @@
-python ./test/test.py
+python ./test/test.py $@

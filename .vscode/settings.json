@@ -1,14 +1,27 @@
 {
   "python.analysis.extraPaths": [
-    "./libaries/**"
-  ],
-  "editor.rulers": [
+    "libaries/**",
+    "palworld_save_tools/**"
   ],
   "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
     "diffEditor.ignoreTrimWhitespace": false,
     "editor.formatOnType": true,
-    "editor.wordBasedSuggestions": "off"
+    "editor.formatOnSave": true,
+    "editor.rulers": [
+      {
+        "column": 240
+      },
+    ],
+    "editor.tabSize": 4,
   },
+  "black-formatter.args": [
+    "--line-length=240",
+    "--target-version=py39",
+    "--target-version=py310",
+    "--target-version=py311",
+    "--target-version=py312",
+  ],
   "pylint.severity": {
     "convention": "Information",
     "error": "Error",
@@ -16,6 +29,6 @@
     "refactor": "Hint",
     "warning": "Warning",
     "info": "Information",
-    "C0301": "Hint"
+    "C0301": "Hint",
   }
 }

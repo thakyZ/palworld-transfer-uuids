@@ -13,4 +13,3 @@ palworld-save-tools-types = {file = "../palworld-save-tools-types/."}
 
 [requires]
 python_version = "3.12"
-python_full_version = "3.12.1"

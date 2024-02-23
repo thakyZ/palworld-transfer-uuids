@@ -13,5 +13,9 @@
 			"path": "../palworld-save-tools-types"
 		}
 	],
-	"settings": {}
+	"settings": {
+  	"files.associations": {
+    	"Pipfile": "ini"
+  	}
+	}
 }

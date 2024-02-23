@@ -78,6 +78,7 @@ def enumerate_user_transfer(who_json: WhoConfig, sav_dir: str):
         else:
             raise TypeError("_new or _old is not type of str.")
 
+
 def main(cwd: str | Path | None = None) -> None:
     """Temporary Method Docstring."""
     root: Path

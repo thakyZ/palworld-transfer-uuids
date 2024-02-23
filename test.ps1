@@ -2,6 +2,6 @@
 
 Push-Location -Location (Join-Path -Path $PScriptDir -ChildPath "test")
 
-& "$((Get-Command -Name "python").Source)" "$(Join-Path -Path $PWD -ChildPath "test.py")";
+& "$((Get-Command -Name "python").Source)" "$(Join-Path -Path $PWD -ChildPath "test.py")" $Args;
 
 Pop-Location

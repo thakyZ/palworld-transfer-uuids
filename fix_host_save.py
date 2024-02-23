@@ -50,7 +50,7 @@ def find_and_replace(json_text: str, last_text: str, old: str, new: str, step: i
             pprint("last_text_new = ", len(last_text_new), " ", type(last_text_new), indent=4)
 
     elif json_text_new == "":
-        pprint(f"Step {step}: json_text == \"\"", indent=3)
+        pprint(f'Step {step}: json_text == ""', indent=3)
         sys.exit(1)
 
     elif json_text_new is None:
@@ -78,29 +78,29 @@ def json_text_operation(json_data: JsonType, guid_formatted: tuple[str, str], gu
 
 def guild_fix_method(level_json: JsonType, new_guid_formatted: str, old_guid_formatted: str, old_instance_id: UUID) -> JsonType:
     """Fixes the host save based on specified inputs."""
-    group_ids_len = len(level_json['properties']['worldSaveData']['value']['GroupSaveDataMap']['value'])
+    group_ids_len = len(level_json["properties"]["worldSaveData"]["value"]["GroupSaveDataMap"]["value"])
 
     for i in range(group_ids_len):
-        group_id = level_json['properties']['worldSaveData']['value']['GroupSaveDataMap']['value'][i]
+        group_id = level_json["properties"]["worldSaveData"]["value"]["GroupSaveDataMap"]["value"][i]
 
-        if group_id['value']['GroupType']['value']['value'] == 'EPalGroupType::Guild':
-            group_data = group_id['value']['RawData']['value']
+        if group_id["value"]["GroupType"]["value"]["value"] == "EPalGroupType::Guild":
+            group_data = group_id["value"]["RawData"]["value"]
 
-            if 'individual_character_handle_ids' in group_data:
-                handle_ids = group_data['individual_character_handle_ids']
+            if "individual_character_handle_ids" in group_data:
+                handle_ids = group_data["individual_character_handle_ids"]
 
                 for j, _ in enumerate(handle_ids):
-                    if handle_ids[j]['instance_id'] == old_instance_id:
-                        level_json['properties']['worldSaveData']['value']['GroupSaveDataMap']['value'][i]['value']['RawData']['value']['individual_character_handle_ids'][j]['guid'] = new_guid_formatted
+                    if handle_ids[j]["instance_id"] == old_instance_id:
+                        level_json["properties"]["worldSaveData"]["value"]["GroupSaveDataMap"]["value"][i]["value"]["RawData"]["value"]["individual_character_handle_ids"][j]["guid"] = new_guid_formatted
 
-            if 'admin_player_uid' in group_data:
-                if old_guid_formatted == group_data['admin_player_uid']:
-                    level_json['properties']['worldSaveData']['value']['GroupSaveDataMap']['value'][i]['value']['RawData']['value']['admin_player_uid'] = new_guid_formatted
+            if "admin_player_uid" in group_data:
+                if old_guid_formatted == group_data["admin_player_uid"]:
+                    level_json["properties"]["worldSaveData"]["value"]["GroupSaveDataMap"]["value"][i]["value"]["RawData"]["value"]["admin_player_uid"] = new_guid_formatted
 
-            if 'players' in group_data:
-                for j, _ in enumerate(group_data['players']):
-                    if old_guid_formatted == group_data['players'][j]['player_uid']:
-                        level_json['properties']['worldSaveData']['value']['GroupSaveDataMap']['value'][i]['value']['RawData']['value']['players'][j]['player_uid'] = new_guid_formatted
+            if "players" in group_data:
+                for j, _ in enumerate(group_data["players"]):
+                    if old_guid_formatted == group_data["players"][j]["player_uid"]:
+                        level_json["properties"]["worldSaveData"]["value"]["GroupSaveDataMap"]["value"][i]["value"]["RawData"]["value"]["players"][j]["player_uid"] = new_guid_formatted
     return level_json
 
 
@@ -126,6 +126,7 @@ def patch_old_save(new_json: JsonType, old_json: JsonType, level_json: JsonType,
 
     return (level_json, new_instance_id, old_instance_id)
 
+
 def fix_host_save(save_path: str, new_guid: str, old_guid: str, guild_fix: bool, level_sav: JsonType | None = None) -> None:
     """Fixes the host save based on specified inputs."""
 
@@ -133,7 +134,7 @@ def fix_host_save(save_path: str, new_guid: str, old_guid: str, guild_fix: bool,
 
     # Users accidentally include the .sav file extension when copying the GUID over. Only the GUID should be passed.
     if new_guid[-4:] == ".sav" or old_guid[-4:] == ".sav":
-        exit_with_message(FileNotFoundError("It looks like you're providing the whole name of the file instead of just the GUID. For example, instead of using \"<GUID>.sav\" in the command, you should be using only the GUID."), 1)
+        exit_with_message(FileNotFoundError('It looks like you\'re providing the whole name of the file instead of just the GUID. For example, instead of using "<GUID>.sav" in the command, you should be using only the GUID.'), 1)
 
     # Users accidentally remove characters from their GUIDs when copying it over. All GUIDs should be 32 characters long.
     if len(new_guid) != 32:
@@ -154,16 +155,21 @@ def fix_host_save(save_path: str, new_guid: str, old_guid: str, guild_fix: bool,
     old_sav_path = f"{save_path}/Players/{old_guid}.sav"
     new_sav_path = f"{save_path}/Players/{new_guid}.sav"
     # Unused variables:
-    #level_json_path = f"{level_sav_path}.json"
-    #old_json_path = f"{old_sav_path}.json"
+    # level_json_path = f"{level_sav_path}.json"
+    # old_json_path = f"{old_sav_path}.json"
 
     # save_path must exist in order to use it.
     if not os.path.exists(save_path):
-        exit_with_message(FileNotFoundError(f"Your given <save_path> of \"{save_path}\" does not exist. Did you enter the correct path to your save folder?"), 1)
+        exit_with_message(FileNotFoundError(f'Your given <save_path> of "{save_path}" does not exist. Did you enter the correct path to your save folder?'), 1)
 
     # The player needs to have created a character on the dedicated server and that save is used for this script.
     if not os.path.exists(new_sav_path):
-        exit_with_message(FileNotFoundError("Your player save does not exist. Did you enter the correct new GUID of your player? It should look like \"8E910AC2000000000000000000000000\".\nDid your player create their character with the provided save? Once they create their character, a file called \"{new_sav_path}\" should appear. Look back over the steps in the README on how to get your new GUID."), 1)
+        exit_with_message(
+            FileNotFoundError(
+                'Your player save does not exist. Did you enter the correct new GUID of your player? It should look like "8E910AC2000000000000000000000000".\nDid your player create their character with the provided save? Once they create their character, a file called "{new_sav_path}" should appear. Look back over the steps in the README on how to get your new GUID.'
+            ),
+            1,
+        )
 
     if is_cli:
         # Warn the user about potential data loss.
@@ -217,16 +223,16 @@ def fix_host_save(save_path: str, new_guid: str, old_guid: str, guild_fix: bool,
     # Convert JSON back to save files.
     if level_sav is None:
         write_json(level_json_4, "out/" + level_sav_path, json_to_sav)
-#   if Path(os.path.join(os.getcwd(), old_sav_path)).exists():
-#       write_json(old_json, old_sav_path, json_to_sav)
+    #   if Path(os.path.join(os.getcwd(), old_sav_path)).exists():
+    #       write_json(old_json, old_sav_path, json_to_sav)
     if Path(os.path.join(os.getcwd(), new_sav_path)).exists():
         write_json(new_json, "out/" + new_sav_path, json_to_sav)
 
     # We must rename the patched save file from the old GUID to the new GUID for the server to
     # recognize it.
-#   if os.path.exists(new_sav_path):
-#       os.remove(new_sav_path)
-#   os.rename(old_sav_path, new_sav_path)
+    #   if os.path.exists(new_sav_path):
+    #       os.remove(new_sav_path)
+    #   os.rename(old_sav_path, new_sav_path)
 
     pprint("Done!", indent=1)
 
@@ -273,7 +279,7 @@ def main() -> None:
     elif sys.argv[3].lower() == "false":
         _guild_fix = False
     else:
-        pprint("[red][bold]ERROR:[/bold][/red] Invalid <guild_fix> argument. It should be either \"True\" or \"False\".", indent=1)
+        pprint('[red][bold]ERROR:[/bold][/red] Invalid <guild_fix> argument. It should be either "True" or "False".', indent=1)
         sys.exit(1)
 
     fix_host_save(sys.argv[0], sys.argv[1], sys.argv[2], _guild_fix)

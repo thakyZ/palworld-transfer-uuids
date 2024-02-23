@@ -1,11 +1,10 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7f1a2a400a14a4905c1cee82189a9ef62cb79e3235a477efdea835e008046acb"
+            "sha256": "623f807e7bb65ea19a2b34767938a264d1ba6d21513f4fdf56f885c3315395d4"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_full_version": "3.12.1",
             "python_version": "3.12"
         },
         "sources": [
@@ -41,6 +40,9 @@
             "index": "pypi",
             "markers": "python_version >= '3.9'",
             "version": "==0.19.0"
+        },
+        "palworld-save-tools-types": {
+            "file": "../palworld-save-tools-types/."
         },
         "pygments": {
             "hashes": [
