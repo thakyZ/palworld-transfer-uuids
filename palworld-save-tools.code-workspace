@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "../palworld-host-save-fix"
+		},
+		{
+			"path": "../palworld-save-tools-types"
 		}
 	],
 	"settings": {}
