@@ -277,3 +277,6 @@ who.json
 *.zip
 *.tar
 *.tar.gz
+!example.zip
+!test/who.json
+test/*/
